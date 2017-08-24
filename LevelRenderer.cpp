@@ -11,7 +11,7 @@ void LevelRenderer::Render(sf::RenderTarget& tgt)
 {
     for (auto& ob : m_obs) {
         sf::RectangleShape shape;
-        shape.setPosition(ob.X*16, ob.Y*16);
+        shape.setPosition(ob.X*16, ob.Y*16); // change this constants!
         shape.setSize(sf::Vector2f(ob.W*16, ob.H*16));
 
         if (ob.Id == 0)
