@@ -17,15 +17,14 @@ void Ray::Update(Player pl, int mx, int my, const std::vector<Obstacle>& obs)
 
     m_ln.clear();
 
-    float angle = atan2(mx-p.x, my-p.y);
-    angle = 2*M_PI-(angle+M_PI);
-
+    float angle = M_PI-atan2(mx-p.x, my-p.y);
+    
     if (line(p.x, p.y, mx, my, obs, ret, isVert)) {
         for (int i = 0; i < 2; i++) {
             if (isVert)
-                angle = 2*M_PI-(angle-M_PI);
+                angle = M_PI-angle;
             else 
-                angle = M_PI-(angle-M_PI); 
+                angle = -angle; 
 
             float destX = sin(angle)*TRAVEL+ret.x;
             float destY = -cos(angle)*TRAVEL+ret.y;
