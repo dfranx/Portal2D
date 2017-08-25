@@ -4,34 +4,31 @@
 
 
 #define TRAVEL 200
-
-int r2d(float x) {
-    return x*180/M_PI;
-}
+#define RAY_COUNT 3
 
 void Ray::Update(Player pl, int mx, int my, const std::vector<Obstacle>& obs)
 {
-    sf::Vector2f p = pl.GetPosition();
-    sf::Vector2f ret;
+    sf::Vector2f ret = pl.GetPosition();
+
     bool isVert;
+    float angle = M_PI-atan2(mx-ret.x, my-ret.y);
+    float destX;
+    float destY;
 
     m_ln.clear();
 
-    float angle = M_PI-atan2(mx-p.x, my-p.y);
-    
-    if (line(p.x, p.y, mx, my, obs, ret, isVert)) {
-        for (int i = 0; i < 2; i++) {
-            if (isVert)
-                angle = M_PI-angle;
-            else 
-                angle = -angle; 
+    for (int i = 0; i < RAY_COUNT; i++) {
+        destX = sin(angle)*TRAVEL+ret.x;
+        destY = -cos(angle)*TRAVEL+ret.y;
 
-            float destX = sin(angle)*TRAVEL+ret.x;
-            float destY = -cos(angle)*TRAVEL+ret.y;
+        if (!line(ret.x, ret.y, destX, destY, obs, ret, isVert))
+            break;
 
-            if (!line(ret.x, ret.y, destX, destY, obs, ret, isVert))
-                break;
-        }
+        if (isVert)
+            angle = M_PI-angle;
+        else 
+            angle = -angle; 
+
     }
 }
 
