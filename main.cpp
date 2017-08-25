@@ -16,12 +16,8 @@ int main()
 
     // Load/Create test level
     LevelBuilder builder;
-    builder.AddObstacle({ 0, 2, 2, 1, 5 });
-    builder.AddObstacle({ 0, 2, 2, 5, 1 });
-    builder.AddObstacle({ 0, 5, 5, 1, 5 });
-    builder.AddObstacle({ 0, 2, 12, 1, 5 });
-    builder.AddObstacle({ 0, 5, 17, 1, 5 });
-    
+    builder.Load("test.lvl");
+
     // Actual level renderer
     LevelRenderer level;
     level.Create(builder);
@@ -32,6 +28,7 @@ int main()
 
     // Cast ray
     Ray ray;
+    ray.Init();
 
     sf::Event ev;
     while (wnd.isOpen()) {
@@ -41,9 +38,15 @@ int main()
             else if (ev.type == sf::Event::Resized)
                 wnd.setView(sf::View(sf::FloatRect(0, 0, ev.size.width, ev.size.height)));
             else if (ev.type == sf::Event::MouseButtonPressed)
-                player.Shoot(ev.mouseButton.x, ev.mouseButton.y, builder.GetObstacles());
+                player.Shoot(ray);
             else if (ev.type == sf::Event::MouseMoved)
                 ray.Update(player, ev.mouseMove.x, ev.mouseMove.y, builder.GetObstacles());
+            else if (ev.type == sf::Event::KeyPressed) {
+                if (ev.key.code == sf::Keyboard::R) // reset
+                    player.Spawn(4, 5);
+                else if (ev.key.code == sf::Keyboard::F1) // debug only!! allows ray rendering
+                    ray.Visible = !ray.Visible;
+            }
         }
 
         player.Update();

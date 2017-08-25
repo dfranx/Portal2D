@@ -5,15 +5,20 @@
 #include <SFML/Graphics/Vertex.hpp>
 #include <vector>
 
-#include "Player.h"
 #include "LevelObstacle.h"
+
+class Player;
 
 class Ray
 {
 public:
+    void Init();
+
     void Update(Player pl, int mx, int my, const std::vector<Obstacle>& obs);
 
     void Render(sf::RenderTarget& tgt);
+
+    bool Visible;
 
 private:
     // Bresenham's line algorithm

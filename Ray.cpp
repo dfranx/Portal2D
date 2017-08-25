@@ -1,10 +1,16 @@
 #include "Ray.h"
+#include "Player.h"
 
 #include <SFML/Graphics/RectangleShape.hpp>
 
 
 #define TRAVEL 200
 #define RAY_COUNT 3
+
+void Ray::Init() 
+{
+    Visible = false;
+}
 
 void Ray::Update(Player pl, int mx, int my, const std::vector<Obstacle>& obs)
 {
@@ -34,7 +40,8 @@ void Ray::Update(Player pl, int mx, int my, const std::vector<Obstacle>& obs)
 
 void Ray::Render(sf::RenderTarget& tgt)
 { 
-    tgt.draw(&m_ln[0], m_ln.size(), sf::LinesStrip);
+    if (Visible)
+        tgt.draw(&m_ln[0], m_ln.size(), sf::LinesStrip);
 }
 
 bool Ray::line(int x0, int y0, int x1, int y1, const std::vector<Obstacle>& obs, sf::Vector2f& pos, bool& vert)

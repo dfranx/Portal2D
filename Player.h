@@ -7,12 +7,14 @@
 
 #include "LevelObstacle.h"
 
+class Ray;
+
 class Player
 {
 public:
     void Spawn(int x, int y);
 
-    void Shoot(int x, int y, const std::vector<Obstacle>& obs);
+    int Shoot(Ray& ray);
 
     void Update();
 

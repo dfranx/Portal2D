@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "Ray.h"
 
 void Player::Spawn(int x, int y)
 {
@@ -8,9 +9,9 @@ void Player::Spawn(int x, int y)
     m_player.setOrigin(8, 8);
 }
 
-void Player::Shoot(int x, int y, const std::vector<Obstacle>& obs)
+int Player::Shoot(Ray& ray)
 {
-    
+    return 0;
 }
 
 void Player::Update()

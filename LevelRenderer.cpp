@@ -14,8 +14,8 @@ void LevelRenderer::Render(sf::RenderTarget& tgt)
         shape.setPosition(ob.X*16, ob.Y*16); // change this constants!
         shape.setSize(sf::Vector2f(ob.W*16, ob.H*16));
 
-        if (ob.Id == 0)
-            shape.setFillColor(sf::Color::White);
+        if (ob.Id == 1)
+            shape.setFillColor(sf::Color::Green);
 
         tgt.draw(shape);
     }
