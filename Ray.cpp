@@ -9,11 +9,6 @@ int r2d(float x) {
     return x*180/M_PI;
 }
 
-void Ray::Init()
-{
-    m_angle = 0;
-}
-
 void Ray::Update(Player pl, int mx, int my, const std::vector<Obstacle>& obs)
 {
     sf::Vector2f p = pl.GetPosition();
@@ -21,25 +16,23 @@ void Ray::Update(Player pl, int mx, int my, const std::vector<Obstacle>& obs)
     bool isVert;
 
     m_ln.clear();
-    
-    m_angle = atan2(mx-p.x, my-p.y);
-    m_angle = 2*M_PI-(m_angle+M_PI);
+
+    float angle = atan2(mx-p.x, my-p.y);
+    angle = 2*M_PI-(angle+M_PI);
 
     if (line(p.x, p.y, mx, my, obs, ret, isVert)) {
-        printf("%d\n", r2d(m_angle));
+        for (int i = 0; i < 2; i++) {
+            if (isVert)
+                angle = 2*M_PI-(angle-M_PI);
+            else 
+                angle = M_PI-(angle-M_PI); 
 
-        float bounceAngle = M_PI-(m_angle-M_PI);
+            float destX = sin(angle)*TRAVEL+ret.x;
+            float destY = -cos(angle)*TRAVEL+ret.y;
 
-        if (isVert)
-            bounceAngle = 2*M_PI-(m_angle-M_PI);
-
-        printf("angle:%d\nbounce: %d\n\n", r2d(m_angle), r2d(bounceAngle));
-
-        float destX = sin(bounceAngle)*TRAVEL+ret.x;
-        float destY = -cos(bounceAngle)*TRAVEL+ret.y; // invert Y for proper orientation
-
-        line(ret.x, ret.y, destX, destY, obs, ret, isVert);
-        //m_ln.push_back(sf::Vertex(sf::Vector2f(destX, destY), sf::Color::White));
+            if (!line(ret.x, ret.y, destX, destY, obs, ret, isVert))
+                break;
+        }
     }
 }
 
@@ -70,6 +63,9 @@ bool Ray::line(int x0, int y0, int x1, int y1, const std::vector<Obstacle>& obs,
                 error -= delX;
                 y += dirY;
             }
+            
+            x += dirX;
+            error += delY;  
 
             for (auto ob : obs) {
                 if (ob.GetBounds().contains(x, y)) {
@@ -77,9 +73,7 @@ bool Ray::line(int x0, int y0, int x1, int y1, const std::vector<Obstacle>& obs,
                     vert = vertical(x,y, ob);
                     return true;
                 }
-            }
-            
-            x += dirX, error += delY;            
+            }          
         }
     } else {
         error = delX - (delY / 2);
@@ -89,7 +83,10 @@ bool Ray::line(int x0, int y0, int x1, int y1, const std::vector<Obstacle>& obs,
                 error -= delY;
                 x += dirX;
             }
-
+            
+            y += dirY;
+            error += delX;
+            
             for (auto ob : obs) {
                 if (ob.GetBounds().contains(x, y)) {
                     m_ln.push_back(sf::Vertex(pos = sf::Vector2f(x, y), sf::Color::Blue));
@@ -97,8 +94,6 @@ bool Ray::line(int x0, int y0, int x1, int y1, const std::vector<Obstacle>& obs,
                     return true;
                 }
             }
-
-            y += dirY, error += delX;
         }
     }
 

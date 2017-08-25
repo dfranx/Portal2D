@@ -11,8 +11,6 @@
 class Ray
 {
 public:
-    void Init();
-
     void Update(Player pl, int mx, int my, const std::vector<Obstacle>& obs);
 
     void Render(sf::RenderTarget& tgt);
@@ -24,7 +22,6 @@ private:
     // is it bouncing off of left and right side or top and down side of obstacle?
     bool vertical(int x, int y, Obstacle ob);
 
-    float m_angle; // character "rotation"
     std::vector<sf::Vertex> m_ln; // visual representation of ray
 };
 

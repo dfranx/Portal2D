@@ -32,7 +32,6 @@ int main()
 
     // Cast ray
     Ray ray;
-    ray.Init();
 
     sf::Event ev;
     while (wnd.isOpen()) {
