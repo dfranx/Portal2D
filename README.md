@@ -1,6 +1,8 @@
 # Portal2D
-Game prototype.
+Game prototype.  
 **STATUS**: prototype is finished - needs final touches
+
+&nbsp;
 
 ## Prototype Description
 In this game (prototype) you bounce off of walls and teleport. You move around the map by teleporting. Your goal is to get to the green platform. If you teleport into empty area (when you miss platform) you go back to spawn point.
@@ -12,6 +14,7 @@ Green circle represents player.
 Blue ray tells us which path will player follow.  
 White platforms are normal platforms.  
 
+&nbsp;
 
 ## Building
 ### Linux
