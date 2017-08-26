@@ -5,7 +5,7 @@ Game prototype.
 ## Prototype Description
 In this game (prototype) you bounce off of walls and teleport. You move around the map by teleporting. Your goal is to get to the green platform. If you teleport into empty area (when you miss platform) you go back to spawn point.
 
-Screenshot:
+Screenshot:  
 ![portal2d.png](http://i.imgur.com/MZFZcK8.png)
 
 Green circle represents player.  
