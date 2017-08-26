@@ -9,7 +9,7 @@
 
 void Ray::Init() 
 {
-    Visible = false;
+    Visible = true;
 }
 
 void Ray::Update(Player pl, int mx, int my, const std::vector<Obstacle>& obs)
@@ -27,7 +27,7 @@ void Ray::Update(Player pl, int mx, int my, const std::vector<Obstacle>& obs)
         destX = sin(angle)*TRAVEL+ret.x;
         destY = -cos(angle)*TRAVEL+ret.y;
 
-        if (!line(ret.x, ret.y, destX, destY, obs, ret, isVert))
+        if ((m_id = line(ret.x, ret.y, destX, destY, obs, ret, isVert)) < 0)
             break;
 
         if (isVert)
@@ -35,6 +35,7 @@ void Ray::Update(Player pl, int mx, int my, const std::vector<Obstacle>& obs)
         else 
             angle = -angle; 
 
+        m_pos = ret;
     }
 }
 
@@ -44,7 +45,7 @@ void Ray::Render(sf::RenderTarget& tgt)
         tgt.draw(&m_ln[0], m_ln.size(), sf::LinesStrip);
 }
 
-bool Ray::line(int x0, int y0, int x1, int y1, const std::vector<Obstacle>& obs, sf::Vector2f& pos, bool& vert)
+int Ray::line(int x0, int y0, int x1, int y1, const std::vector<Obstacle>& obs, sf::Vector2f& pos, bool& vert)
 {
     int delX = std::abs(x1 - x0) * 2;
     int dirX = (x1 - x0 < 0) ? -1 : ((x1 - x0 > 0) ? 1 : 0);
@@ -74,7 +75,7 @@ bool Ray::line(int x0, int y0, int x1, int y1, const std::vector<Obstacle>& obs,
                 if (ob.GetBounds().contains(x, y)) {
                     m_ln.push_back(sf::Vertex(pos = sf::Vector2f(x, y), sf::Color::Blue));
                     vert = vertical(x,y, ob);
-                    return true;
+                    return (int)ob.Id;
                 }
             }          
         }
@@ -94,14 +95,14 @@ bool Ray::line(int x0, int y0, int x1, int y1, const std::vector<Obstacle>& obs,
                 if (ob.GetBounds().contains(x, y)) {
                     m_ln.push_back(sf::Vertex(pos = sf::Vector2f(x, y), sf::Color::Blue));
                     vert = vertical(x,y, ob);
-                    return true;
+                    return (int)ob.Id;
                 }
             }
         }
     }
 
     m_ln.push_back(sf::Vertex(pos = sf::Vector2f(x, y), sf::Color::Blue));
-    return false;
+    return -1;
 }
 
 bool Ray::vertical(int x, int y, Obstacle ob)

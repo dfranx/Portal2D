@@ -8,11 +8,14 @@
 #include "LevelObstacle.h"
 
 class Ray;
+class Level;
 
 class Player
 {
 public:
     void Spawn(int x, int y);
+
+    inline void SetLevel(Level* lvl) { m_lvl = lvl; }
 
     int Shoot(Ray& ray);
 
@@ -24,6 +27,7 @@ public:
 
 private:
     sf::CircleShape m_player; // visual representation of a player
+    Level* m_lvl;
 };
 
 #endif //__PLAYER_H__

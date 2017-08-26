@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "Level.h"
 #include "Ray.h"
 
 void Player::Spawn(int x, int y)
@@ -11,7 +12,20 @@ void Player::Spawn(int x, int y)
 
 int Player::Shoot(Ray& ray)
 {
-    return 0;
+    sf::Vector2f pos = ray.GetEndPosition();
+    int id = ray.GetEndId();
+
+    if (id == -1) {
+        m_lvl->Reset(*this);
+    } else if (id == 1) { // player completed level but just reset it
+        m_lvl->Reset(*this);
+    } else {
+        m_player.setPosition(pos);
+    }
+
+    ray.Update(*this, pos.x, pos.y, m_lvl->GetObstacles());
+    
+    return id;
 }
 
 void Player::Update()

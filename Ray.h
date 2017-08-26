@@ -20,14 +20,21 @@ public:
 
     bool Visible;
 
+    inline sf::Vector2f GetEndPosition() { return m_pos; }
+    inline int GetEndId() { return m_id; }
+
 private:
     // Bresenham's line algorithm
-    bool line(int x0, int y0, int x1, int y1, const std::vector<Obstacle>& obs, sf::Vector2f& pos, bool& vertical);
+    int line(int x0, int y0, int x1, int y1, const std::vector<Obstacle>& obs, sf::Vector2f& pos, bool& vertical);
 
     // is it bouncing off of left and right side or top and down side of obstacle?
     bool vertical(int x, int y, Obstacle ob);
 
     std::vector<sf::Vertex> m_ln; // visual representation of ray
+
+    // collision data
+    int m_id;
+    sf::Vector2f m_pos;
 };
 
 #endif //__RAY_H__

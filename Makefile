@@ -9,9 +9,9 @@ all: dortal
 %.o: %.h
 	$(CXX) -c $< -o $@ -std=c++11
 
-dortal: main.o LevelBuilder.o LevelObstacle.o LevelRenderer.o Player.o Ray.o
+dortal: main.o Level.o LevelBuilder.o LevelObstacle.o LevelRenderer.o Player.o Ray.o
 	@echo "** Building the game"
-	$(CXX) -o dortal.bin main.o LevelBuilder.o LevelRenderer.o Player.o Ray.o $(LIBS)
+	$(CXX) -o dortal.bin main.o Level.o LevelBuilder.o LevelRenderer.o Player.o Ray.o $(LIBS)
 
 clean:
 	@echo "** Removing object files and executable..."
