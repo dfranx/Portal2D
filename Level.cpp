@@ -1,10 +1,12 @@
 #include "Level.h"
 #include "Player.h"
 
-void Level::Load(std::string file)
+bool Level::Load(std::string file)
 {
-    m_builder.Load(file);
+    bool ret = m_builder.Load(file);
     m_renderer.Create(m_builder);
+
+	return ret;
 }
 
 void Level::Reset(Player& pl)

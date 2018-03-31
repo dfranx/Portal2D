@@ -10,12 +10,13 @@
 int main()
 {
     sf::RenderWindow wnd;
-    wnd.create(sf::VideoMode(1280, 800), "Portal Prototype", sf::Style::Default);
+    wnd.create(sf::VideoMode(1280, 800), "Portal2D", sf::Style::Default);
     wnd.setFramerateLimit(60);
 
     // Level data
     Level level;
-    level.Load("test.lvl");
+	if (!level.Load("test.lvl"))
+		printf("Failed to load a level.");
 
     // Player
     Player player;
@@ -23,9 +24,8 @@ int main()
     // spawn player
     level.Reset(player);
 
-    // Cast ray
+    // ray caster
     Ray ray;
-    ray.Init();
 
     sf::Event ev;
     while (wnd.isOpen()) {
@@ -47,8 +47,6 @@ int main()
                     ray.Visible = !ray.Visible;
             }
         }
-
-        player.Update();
 
         wnd.clear();
 

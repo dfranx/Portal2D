@@ -1,7 +1,8 @@
-#ifndef __LEVEL_OBSTACLE_H__
-#define __LEVEL_OBSTACLE_H__
+#ifndef __PORTAL2D_LEVEL_OBSTACLE_H__
+#define __PORTAL2D_LEVEL_OBSTACLE_H__
 
 #include <SFML/Graphics/Rect.hpp>
+#include "Config.h"
 
 struct Obstacle
 {
@@ -9,7 +10,7 @@ struct Obstacle
     char X, Y;
     char W, H;
 
-    inline sf::IntRect GetBounds() { return { X*16, Y*16, W*16, H*16 }; }
+    inline sf::IntRect GetBounds() { return { X*UNIT_WIDTH, Y*UNIT_HEIGHT, W*UNIT_WIDTH, H*UNIT_HEIGHT }; }
 };
 
-#endif //__LEVEL_OBSTACLE_H__
+#endif //__PORTAL2D_LEVEL_OBSTACLE_H__
