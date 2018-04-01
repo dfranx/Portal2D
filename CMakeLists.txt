@@ -1,11 +1,5 @@
 cmake_minimum_required(VERSION 2.6)
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_HOME_DIRECTORY}/bin)
-
-if(NOT CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE Debug CACHE STRING "Choose the type of build (Debug or Release)" FORCE)
-endif()
-
 project(Portal2D)
 
 set(EXECUTABLE_NAME "Portal2D")
