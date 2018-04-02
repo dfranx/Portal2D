@@ -10,7 +10,7 @@ We move the player with left mouse button press. White platforms are normal stat
 We win by getting on green platform.
 
 ## Getting Started
-Following steps will show you how to build Portal2D on your machine.
+These steps will show you how to build Portal2D on your machine.
 
 ### Dependencies
 This project uses SFML for rendering. To get SFML on your computer you can
