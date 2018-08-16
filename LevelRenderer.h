@@ -7,18 +7,14 @@
 class LevelRenderer
 {
 public:
-	///////////////////////////////////////
-	// get obstacles from LevelBuilder
-	///////////////////////////////////////
+	// get the list of obstacles from LevelBuilder
     void Create(LevelBuilder& builder);
 
-	///////////////////////////////////////
-	// render obstacles
-	///////////////////////////////////////
+	// render all the obstacles
     void Render(sf::RenderTarget& tgt);
 
 private:
-    std::vector<Obstacle> m_obs; // list of all obstacles
+    std::vector<Obstacle> m_obs;
 };
 
 #endif //__PORTAL2D_LEVEL_RENDERER_H__

@@ -8,20 +8,14 @@ class Player;
 class Level
 {
 public:
-	///////////////////////////////////////
 	// load level from file
-	///////////////////////////////////////
     bool Load(std::string file);
 
-	///////////////////////////////////////
 	// reset players position
-	///////////////////////////////////////
     void Reset(Player& pl);
 
-	///////////////////////////////////////
 	// render level
-	///////////////////////////////////////
-    void Render(sf::RenderTarget& tgt);
+	inline void Render(sf::RenderTarget& tgt) { m_renderer.Render(tgt); }
 
 	// get all obstacles
     inline const std::vector<Obstacle> GetObstacles() { return m_builder.GetObstacles(); }

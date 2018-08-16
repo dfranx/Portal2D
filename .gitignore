@@ -1,8 +1,10 @@
 # Directories
 .vs
 bin
+Debug
 
 # env
+*.vcxproj.*
 CMakeSettings.json
 
 # Compiled Object files
@@ -24,3 +26,5 @@ CMakeSettings.json
 *.out
 *.app
 *.bin
+*.dll
+Debug

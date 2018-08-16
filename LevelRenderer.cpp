@@ -12,7 +12,7 @@ void LevelRenderer::Render(sf::RenderTarget& tgt)
 {
     for (auto& ob : m_obs) {
         sf::RectangleShape shape;
-        shape.setPosition(ob.X*UNIT_WIDTH, ob.Y*UNIT_HEIGHT); // change this constants!
+		shape.setPosition(ob.X*UNIT_WIDTH, ob.Y*UNIT_HEIGHT);
         shape.setSize(sf::Vector2f(ob.W*UNIT_WIDTH, ob.H*UNIT_HEIGHT));
 		shape.setFillColor(sf::Color::White);
 

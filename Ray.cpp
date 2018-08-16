@@ -1,40 +1,54 @@
 #include "Ray.h"
 #include "Player.h"
 #include "Config.h"
+#include <math.h>
 
 #include <SFML/Graphics/RectangleShape.hpp>
+
+sf::Vector2f normalize(sf::Vector2f x)
+{
+	float length = sqrt(x.x*x.x + x.y*x.y);
+	return { x.x / length, x.y / length };
+}
+float cross(sf::Vector2f a, sf::Vector2f b)
+{
+	return a.x*b.y - a.y*b.x;
+}
+float dot(sf::Vector2f a, sf::Vector2f b)
+{
+	return a.x * b.x + a.y * b.y;
+}
+
+
 
 Ray::Ray() 
 {
     Visible = true;
 }
 
-void Ray::Update(Player pl, int mx, int my, const std::vector<Obstacle>& obs)
+void Ray::Update(Player pl, sf::Vector2i mouse, const std::vector<Obstacle>& obs)
 {
-    sf::Vector2f ret = pl.GetPosition();
+	sf::Vector2f rayStart = pl.GetPosition();
+	sf::Vector2f rayEnd = sf::Vector2f(mouse);
 
-    float angle = M_PI-atan2(mx-ret.x, my-ret.y);
+	rayEnd = normalize(rayEnd - rayStart) * SEGMENT_TRAVEL + rayStart;
 
     m_ln.clear();
 
+	// for each segment check the collision
     for (int i = 0; i < SEGMENT_COUNT; i++) {
-		bool isVert;
-        float destX = sin(angle)*SEGMENT_TRAVEL+ret.x;	// x travel of a segment (basic trigonometry + offset by a player position)
-        float destY = -cos(angle)*SEGMENT_TRAVEL+ret.y;	// y travel of a segment
 
-		// check if we hit any obstacle, if we didnt just stop checking
-        if ((m_id = line(ret.x, ret.y, destX, destY, obs, ret, isVert)) < 0)
+		sf::Vector2f ray = rayEnd - rayStart, normal;
+
+		// check if we hit any obstacle
+        if ((m_id = check(rayStart, rayEnd, obs, normal, rayStart)) < 0)
             break;
 
-		// adjust angle accordingly if we hit vertical or horizontal side of a obstacle
-        if (isVert)
-            angle = M_PI-angle;
-        else 
-            angle = -angle; 
+		rayEnd = normalize(ray - 2 * dot(ray, normal) * normal) * SEGMENT_TRAVEL + rayStart;
+	}
 
-		// save end position
-        m_pos = ret;
-    }
+	// save end position
+	m_pos = rayStart;
 }
 
 void Ray::Render(sf::RenderTarget& tgt)
@@ -43,74 +57,63 @@ void Ray::Render(sf::RenderTarget& tgt)
         tgt.draw(&m_ln[0], m_ln.size(), sf::LinesStrip);
 }
 
-int Ray::line(int x0, int y0, int x1, int y1, const std::vector<Obstacle>& obs, sf::Vector2f& pos, bool& vert)
+int Ray::check(const sf::Vector2f& start, const sf::Vector2f& end, const std::vector<Obstacle>& obs, sf::Vector2f& normal, sf::Vector2f& pos)
 {
-	// https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
+    m_ln.push_back(sf::Vertex(start, sf::Color::Blue));
 
-    int delX = std::abs(x1 - x0) * 2;
-    int dirX = (x1 - x0 < 0) ? -1 : ((x1 - x0 > 0) ? 1 : 0);
+	sf::Vector2f ray = normalize(end - start) * SEGMENT_TRAVEL;
+	
+	float ext = 1;
+	int ret = -1;
 
-    int delY = std::abs(y1 - y0) * 2;
-    int dirY = (y1 - y0 < 0) ? -1 : ((y1 - y0 > 0) ? 1 : 0);
- 
-    int error;
-    int x = x0+dirX;
-    int y = y0+dirY;
+	// go through the given list of obstacles and check for collision with each side
+	// NOTE: in future we can have rotated or more complex (concave for example) shapes with more points
+	for (const Obstacle& ob : obs) {
+		sf::Vector2f oPos(ob.X*UNIT_WIDTH, ob.Y*UNIT_HEIGHT), oSize(ob.W*UNIT_WIDTH, ob.H*UNIT_HEIGHT);
 
-    m_ln.push_back(sf::Vertex(sf::Vector2f(x, y), sf::Color::Blue));
-    
-    if (delX >= delY) {
-        error = delY - (delX / 2);
- 
-        for (; x != x1;) {
-            if ((error > 0) || (!error && (dirX > 0))) {
-                error -= delX;
-                y += dirY;
-            }
-            
-            x += dirX;
-            error += delY;  
+		// left
+		if (line(ext, normal, start, end, oPos, sf::Vector2f(0, oSize.y) + oPos)) ret = ob.Id;
 
-            for (auto ob : obs) {
-                if (ob.GetBounds().contains(x, y)) {
-                    m_ln.push_back(sf::Vertex(pos = sf::Vector2f(x, y), sf::Color::Blue));
-                    vert = vertical(x,y, ob);
-                    return (int)ob.Id;
-                }
-            }          
-        }
-    } else {
-        error = delX - (delY / 2);
- 
-        for (; y != y1;) {
-            if (error > 0 || (!error && dirY > 0)) {
-                error -= delY;
-                x += dirX;
-            }
-            
-            y += dirY;
-            error += delX;
-            
-            for (auto ob : obs) {
-                if (ob.GetBounds().contains(x, y)) {
-                    m_ln.push_back(sf::Vertex(pos = sf::Vector2f(x, y), sf::Color::Blue));
-                    vert = vertical(x,y, ob);
-                    return (int)ob.Id;
-                }
-            }
-        }
-    }
+		// right
+		if (line(ext, normal, start, end, oPos + sf::Vector2f(oSize.x, 0), oSize + oPos)) ret = ob.Id;
 
-    m_ln.push_back(sf::Vertex(pos = sf::Vector2f(x, y), sf::Color::Blue));
-    return -1;
+		// top
+		if (line(ext, normal, start, end, oPos, sf::Vector2f(oSize.x, 0) + oPos)) ret = ob.Id;
+
+		// bottom
+		if (line(ext, normal, start, end, oPos + sf::Vector2f(0, oSize.y), oSize + oPos)) ret = ob.Id;
+	}
+
+	// calculate the end position
+	pos = ray * ext + start;
+
+    m_ln.push_back(sf::Vertex(pos, sf::Color::Blue));
+
+    return ret;
 }
 
-bool Ray::vertical(int x, int y, Obstacle ob)
+bool Ray::line(float &ext, sf::Vector2f& normal, const sf::Vector2f& rStart, const sf::Vector2f& rEnd, const sf::Vector2f& cStart, const sf::Vector2f& cEnd)
 {
-    sf::IntRect bnd = ob.GetBounds();
+	sf::Vector2f ray = rEnd - rStart;
+	sf::Vector2f collider = cEnd - cStart;
 
-    if (x <= bnd.left+1 || x >= bnd.left+bnd.width-1)
-        return false; // it is not vertical if x position is same as x or x+width position of element
+	float y = cross(cStart - rStart, collider) / cross(ray, collider);
+	float x = cross(rStart - cStart, ray) / -cross(ray, collider);
 
-    return true;
+	if (y <= 0 || y > 1 || x < 0 || x > 1) return false;
+
+	if (y < ext) {
+		ext = y;
+
+		// calculate normal
+		normal = sf::Vector2f(-collider.y, collider.x);
+		float angle = dot(normalize(normal), normalize(normal));
+		if (angle > 0)
+			normal = -normal;
+		normal = normalize(normal);
+
+		return true;
+	}
+
+	return false;
 }

@@ -30,8 +30,8 @@ int Player::Shoot(Ray& ray)
 		etc..
 	*/
 
-	// we have new position = we need to update ray
-    ray.Update(*this, pos.x, pos.y, m_lvl->GetObstacles());
+	// we have new position = we need to update the ray
+    ray.Update(*this, sf::Vector2i(pos), m_lvl->GetObstacles());
     
     return id;
 }

@@ -1,21 +1,14 @@
 # Portal2D
-This project is a simple game prototype. In this game you bounce off of walls and teleport around the map.
+Portal2D is a simple game prototype. The main mechanic of the game is to bounce off of the obstacles.
 Your goal is to get to the green platform.
+Various things could be added to this game in future. For example: moving platforms, spikes, more complex shapes, etc...
+The graphics is simple and it is just a placeholder. Also, quad tree could be implemented so that the line-line collision
+isnt checked with every single obstacle.
 
-## Screenshots  
 ![portal2d.png](http://i.imgur.com/MZFZcK8.png)
 
-Player is a simple green circle while his path is shown with a blue lines.
-We move the player with left mouse button press. White platforms are normal stationary platforms.
-We win by getting on green platform.
-
-## Getting Started
-These steps will show you how to build Portal2D on your machine.
-
-### Dependencies
-This project uses SFML for rendering. To get SFML on your computer you can
-visit this [link](https://www.sfml-dev.org/download.php). Portal2D uses *v2.4.2*
-because at the time of making it was the newest version.
+## Building
+This project uses [SFML](https://www.sfml-dev.org) *v2.5*.
 
 ### Installing
 First, you need the source code:
@@ -24,22 +17,14 @@ git clone https://github.com/GeneralNote/Portal2D.git Portal2D
 cd Portal2D
 ```
 
-Then you can build it
+To build it on **Linux** run these commands:
 ```
 cmake .
 make
-```
-
-If you get error message which says that SFML was not found on your computer
-you need to specify SFML_ROOT variable in your ***cmake*** command:
-```
-cmake -DSFML_ROOT=path/to/your/sfml . 
-```
-
-Finally, run Portal2D:
-```
 ./Portal2D
 ```
+
+To build it on **Windows** open the .sln file. After that link SFML and build the solution.
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details

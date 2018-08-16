@@ -14,8 +14,3 @@ void Level::Reset(Player& pl)
     pl.Spawn(m_builder.GetSpawn().x, m_builder.GetSpawn().y);
     pl.SetLevel(this);
 }
-
-void Level::Render(sf::RenderTarget& tgt)
-{
-    m_renderer.Render(tgt);
-}

@@ -6,8 +6,8 @@
 
 struct Obstacle
 {
-    char Id;
-    char X, Y;
+    char Id;		// id - what type of obstacle is this?
+    char X, Y;		// position and size
     char W, H;
 
     inline sf::IntRect GetBounds() { return { X*UNIT_WIDTH, Y*UNIT_HEIGHT, W*UNIT_WIDTH, H*UNIT_HEIGHT }; }
