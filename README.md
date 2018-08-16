@@ -24,7 +24,7 @@ make
 ./Portal2D
 ```
 
-To build it on **Windows** open the .sln file. After that link SFML and build the solution.
+To build it on **Windows** open the *.vcxproj* file. After that link SFML and build the project.
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
