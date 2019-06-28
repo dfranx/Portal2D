@@ -2,8 +2,8 @@
 Portal2D is a simple game prototype. The main mechanic of the game is to bounce off of the obstacles.
 Your goal is to get to the green platform.
 Various things could be added to this game in future. For example: moving platforms, spikes, more complex shapes, etc...
-The graphics is simple and it is just a placeholder. Also, quad tree could be implemented so that the line-line collision
-isnt checked with every single obstacle.
+The graphics are simple and it is just a placeholder. Also, quad tree could be implemented so that the line-line collision
+isn't checked with every obstacle.
 
 ![portal2d.png](http://i.imgur.com/MZFZcK8.png)
 
@@ -24,7 +24,7 @@ make
 ./Portal2D
 ```
 
-To build it on **Windows** open the *.vcxproj* file. After that link SFML and build the project.
+To build it on **Windows** open the *.vcxproj* file then link SFML and build the project.
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
